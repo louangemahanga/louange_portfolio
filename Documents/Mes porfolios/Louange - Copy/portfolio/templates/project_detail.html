@@ -1,0 +1,82 @@
+{# portfolio/templates/project_detail.html #}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {# Balises SEO spécifiques au projet #}
+    <title>{{ projet.titre }} - SacréCodeur Portfolio</title>
+    <meta name="description" content="{{ projet.description|truncatechars:160 }}">
+    <meta name="keywords" content="{{ projet.titre|lower }}, {{ projet.technologies_utilisee|lower }}, développeur full-stack, portfolio">
+    {# Open Graph spécifiques au projet #}
+    <meta property="og:title" content="{{ projet.titre }} - SacréCodeur">
+    <meta property="og:description" content="{{ projet.description|truncatechars:160 }}">
+    {% if projet.image %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ projet.image.url }}">
+    {% else %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/og_image_default.jpg' %}">
+    {% endif %}
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="article">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">SACRÉCODEUR<span style="color: var(--accent-purple); font-size: 0.8em;">_OS</span></div>
+                <ul class="nav-links">
+                    <li><a href="{% url 'home' %}#hero">ACCUEIL</a></li>
+                    <li><a href="{% url 'home' %}#about">À PROPOS</a></li>
+                    <li><a href="{% url 'home' %}#skills">COMPÉTENCES</a></li>
+                    <li><a href="{% url 'home' %}#projects">PROJETS</a></li>
+                    <li><a href="{% url 'home' %}#contact">CONTACT</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="project-detail" class="container fade-in" style="margin-top: 100px; padding-bottom: 50px;">
+            <a href="{% url 'home' %}#projects" class="back-link"><i class="fas fa-arrow-left"></i> Retour aux projets</a>
+            <h1 class="section-title" style="text-align: left; margin-top: 30px;">{{ projet.titre }}</h1>
+
+            {% if projet.image %}
+                <img src="{{ projet.image.url }}" alt="Image du projet {{ projet.titre }}" style="max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 30px;">
+            {% else %}
+                <img src="{% static 'images/project_placeholder.jpg' %}" alt="Image par défaut du projet" style="max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 30px;">
+            {% endif %}
+
+            <div class="project-details-content">
+                <p style="font-size: 1.1em; line-height: 1.6; color: var(--text-light);">{{ projet.description|linebreaksbr }}</p>
+
+                <h3>Technologies utilisées :</h3>
+                <p class="project-stack">{{ projet.technologies_utilisee }}</p>
+
+                <div class="project-links" style="margin-top: 30px;">
+                    {% if projet.url_demo %}
+                        <a href="{{ projet.url_demo }}" target="_blank" class="cta-button"><i class="fas fa-globe"></i> Voir la Démo</a>
+                    {% endif %}
+                    {% if projet.url_github %}
+                        <a href="{{ projet.url_github }}" target="_blank" class="cta-button secondary-cta"><i class="fab fa-github"></i> Voir le Code</a>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 SACRÉCODEUR. Tous droits réservés. Propulsé par la passion du code.</p>
+        </div>
+    </footer>
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
