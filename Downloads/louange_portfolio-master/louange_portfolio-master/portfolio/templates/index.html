@@ -1,0 +1,335 @@
+{# portfolio/templates/index.html #}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SacréCodeur - Développeur Full-Stack{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Portfolio de SacréCodeur, développeur full-stack spécialisé en applications web et mobile performantes et intuitives.{% endblock %}">
+    <meta name="keywords" content="développeur full-stack, Django, React, Flutter, Python, Node.js, portfolio, applications web, applications mobile, freelance, Brazzaville">
+    <meta property="og:title" content="{% block og_title %}SacréCodeur - L'Architecture Numérique Réinventée{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Découvrez les réalisations de SacréCodeur, un développeur full-stack passionné et innovant.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/og_image_default.jpg' %}{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="website">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    {# DEBUT DU BLOC POUR AFFICHER LES MESSAGES DE DJANGO #}
+    <div class="messages-container" style="text-align: center; margin-top: 20px;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="padding: 10px; margin-bottom: 10px; border-radius: 5px; {% if message.tags == 'success' %}background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;{% elif message.tags == 'error' %}background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;{% else %}background-color: #e2e3e5; color: #383d41; border: 1px solid #d6d8db;{% endif %}">
+                    {{ message }}
+                    <button type="button" class="close-btn" onclick="this.parentElement.style.display='none';" style="float: right; background: none; border: none; font-size: 1.2em; cursor: pointer;">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    {# FIN DU BLOC POUR AFFICHER LES MESSAGES DE DJANGO #}
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">SACRÉCODEUR<span style="color: var(--accent-purple); font-size: 0.8em;">_OS</span></div>
+                <ul class="nav-links">
+                    <li><a href="#hero">ACCUEIL</a></li>
+                    <li><a href="#about">À PROPOS</a></li>
+                    <li><a href="#skills">COMPÉTENCES</a></li>
+                    <li><a href="#projects">PROJETS</a></li>
+                    <li><a href="#contact">CONTACT</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="contact" class="fade-in">
+            <div class="container">
+                <h2 class="section-title">CONNECTONS-NOUS</h2>
+        
+                {# Affichage des messages Django (success / error / CSRF) #}
+                <div class="messages-container" style="text-align:center; margin-bottom:20px;">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" style="padding:10px; margin-bottom:10px; border-radius:5px;">
+                                {{ message }}
+                                <button type="button" onclick="this.parentElement.style.display='none';"
+                                        style="float:right; background:none; border:none; font-size:1.2em; cursor:pointer;">&times;</button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+        
+                <div class="contact-form-wrapper scale-in">
+                    <p style="color: var(--text-light); margin-bottom: 35px; font-size: 1.1em;">
+                        Prêt à donner vie à votre projet ? Envoyez-moi un message, et bâtissons l'avenir ensemble.
+                    </p>
+        
+                    <form class="contact-form" method="post" action="{% url 'home' %}">
+                        {% csrf_token %}
+                        <label for="name">Nom / Organisation :</label>
+                        <input type="text" id="name" name="name" required placeholder="Votre nom ou le nom de votre entreprise">
+        
+                        <label for="email">Email :</label>
+                        <input type="email" id="email" name="email" required placeholder="votre.email@example.com">
+        
+                        <label for="subject">Sujet :</label>
+                        <input type="text" id="subject" name="subject" required placeholder="Ex: Projet de marketplace, demande d'information">
+        
+                        <label for="message">Votre Message :</label>
+                        <textarea id="message" name="message" required placeholder="Décrivez votre projet ou votre question ici..."></textarea>
+        
+                        <button type="submit">Envoyer mon message <i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+        
+                <div class="contact-info fade-in">
+                    <p>Préférez-vous une approche plus directe ?</p>
+                    <div class="contact-links">
+                        {% if whatsapp_number %}
+                            <a href="https://wa.me/{{ whatsapp_number }}" target="_blank">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        {% endif %}
+                        {% if cvl %}
+                            <a href="{% static cv_url %}" download><i class="fas fa-file-download"></i> Télécharger CV</a>
+                        {% endif %}
+                    </div>
+                </div>
+        
+                <div class="social-links fade-in">
+                    <p style="font-size: 1.2em; color: var(--text-light); margin-bottom: 25px;">
+                        Retrouvez-moi sur les réseaux ou par mon numéro +242 06 990 51 34 / 05 792 05 34:
+                    </p>
+                    {% if github_url %}
+                        <a href="{{ github_url }}" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    {% endif %}
+                    {% if linkedin_url %}
+                        <a href="{{ linkedin_url }}" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    {% endif %}
+                    {% if facebook_url %}
+                        <a href="{{ facebook_url }}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    {% endif %}
+                    <p style="font-size: 1.2em; color: var(--text-light); margin-bottom: 25px;">
+                        à l'adresse 45 , RUE Mabirou (Talangai) et par mon adresse_mail : louangemahanga757@gmail.com
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+
+        <section id="about" class="fade-in">
+            <div class="container">
+                <h2 class="section-title">À PROPOS DE MOI</h2>
+                <div class="about-content">
+                    <div class="about-text slide-left">
+                        <h3>Mon univers et ma mission</h3>
+                        <p>Je suis **SacréCodeur**, un développeur full-stack passionné et autodidacte, obsédé par la création de solutions numériques qui ne se contentent pas de fonctionner, mais qui inspirent.</p>
+                        <p>Mon parcours m'a permis de maîtriser l'intégralité du cycle de vie d'une application : de la conception architecturale à l'optimisation des performances, en passant par la sécurisation des données et le déploiement sur le cloud. Mon objectif est de construire des ponts entre les idées complexes et des interfaces utilisateurs élégantes et intuitives.</p>
+                        <p>Chaque ligne de code est pensée pour la clarté, l'évolutivité et la robustesse, garantissant des produits finis d'une qualité irréprochable.</p>
+                        <h3>Ce que je sais faire de mieux</h3>
+                        <ul>
+                            <li><i class="fas fa-cubes"></i> Architecture et développement d'applications complètes (A à Z)</li>
+                            <li><i class="fas fa-microchip"></i> Optimisation performance et sécurisation des systèmes</li>
+                            <li><i class="fas fa-layer-group"></i> Intégration transparente backend/frontend/mobile</li>
+                            <li><i class="fas fa-lightbulb"></i> Approche innovante et résolution créative de problèmes</li>
+                        </ul>
+                    </div>
+                    <div class="visual-element scale-in">
+                        <div class="photo-overlay" style="background-image: url('{% static 'images/sacre.jpg' %}');"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="fade-in">
+            <div class="container">
+                <h2 class="section-title">COMPÉTENCES TECHNIQUES</h2>
+                <div class="skills-grid">
+                    {% if competences %}
+                        {% regroup competences by get_categorie_display as categories %}
+                        {% for category in categories %}
+                        <div class="skill-category scale-in">
+                            <h3>
+                                {% if category.grouper == 'Backend' %}<i class="fas fa-server"></i>
+                                {% elif category.grouper == 'Frontend' %}<i class="fas fa-code"></i>
+                                {% elif category.grouper == 'Mobile' %}<i class="fas fa-mobile-alt"></i>
+                                {% elif category.grouper == 'Base de Données' %}<i class="fas fa-database"></i>
+                                {% elif category.grouper == 'DevOps' %}<i class="fas fa-cloud"></i>
+                                {% elif category.grouper == 'Outil' %}<i class="fas fa-tools"></i>
+                                {% else %}<i class="fas fa-microchip"></i>
+                                {% endif %}
+                                {{ category.grouper }}
+                            </h3>
+                            <ul class="skill-list">
+                                {% for competence in category.list %}
+                                <li class="skill-item">{{ competence.nom }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="text-align: center; color: var(--text-light);">Aucune compétence n'a été ajoutée pour le moment. Allez dans l'administration pour les ajouter !</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="fade-in">
+            <div class="container">
+                <h2 class="section-title">MES RÉALISATIONS</h2>
+                <div class="project-grid">
+                    {% if projets %}
+                        {% for projet in projets %}
+                        <div class="project-card scale-in">
+                            {% if projet.image %}
+                                <img src="{{ projet.image.url }}" alt="Image du projet {{ projet.titre }}">
+                            {% else %}
+                                <img src="{% static 'images/project_placeholder.jpg' %}" alt="Image par défaut du projet">
+                            {% endif %}
+                            <div class="project-info">
+                                <h3>{{ projet.titre }}</h3>
+                                <p>{{ projet.description|truncatechars:150 }}</p>
+                                <div class="project-stack">Stack: {{ projet.technologies_utilisee }}</div>
+                                <div class="project-links">
+                                    <a href="{{ projet.get_absolute_url }}" class="cta-button small"><i class="fas fa-info-circle"></i> En savoir plus</a>
+                                    {% if projet.url_demo %}
+                                        <a href="{{ projet.url_demo }}" target="_blank"><i class="fas fa-globe"></i> Démo Live</a>
+                                    {% endif %}
+                                    {% if projet.url_github %}
+                                        <a href="{{ projet.url_github }}" target="_blank"><i class="fab fa-github"></i> Code Source</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="text-align: center; color: var(--text-light);">Aucun projet n'a été ajouté pour le moment. Allez dans l'administration pour les ajouter !</p>
+                    {% endif %}
+                </div>
+                <div style="text-align: center; margin-top: 80px;" class="fade-in">
+                    <p style="font-size: 1.2em; color: var(--accent-purple);">**Mon expertise couvre une vaste gamme de projets :**</p>
+                    <ul style="list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 20px;">
+                        <li class="skill-item" style="background-color: var(--accent-purple); color: white;"><i class="fas fa-shopping-cart"></i> Marketplaces & E-commerce</li>
+                        <li class="skill-item" style="background-color: var(--accent-purple); color: white;"><i class="fas fa-users"></i> Réseaux Sociaux Personnalisés</li>
+                        <li class="skill-item" style="background-color: var(--accent-purple); color: white;"><i class="fas fa-chart-area"></i> Dashboards & Visualisation de données</li>
+                        <li class="skill-item" style="background-color: var(--accent-purple); color: white;"><i class="fas fa-book"></i> Applications Éducatives & Quiz</li>
+                        <li class="skill-item" style="background-color: var(--accent-purple); color: white;"><i class="fas fa-video"></i> Plateformes de Streaming</li>
+                        <li class="skill-item" style="background-color: var(--accent-purple); color: white;"><i class="fas fa-cogs"></i> Solutions sur Mesure</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="method" class="fade-in">
+            <div class="container">
+                <h2 class="section-title">MA MÉTHODE DE TRAVAIL</h2>
+                <div class="method-grid">
+                    <div class="method-card scale-in">
+                        <h3><i class="fas fa-brain"></i> Analyse & Stratégie</h3>
+                        <p>Plonger au cœur de votre vision. Une phase d'analyse approfondie pour définir les objectifs, les fonctionnalités clés et l'architecture technique idéale. Chaque projet démarre par un plan stratégique solide.</p>
+                    </div>
+                    <div class="method-card scale-in">
+                        <h3><i class="fas fa-sitemap"></i> Conception & Structuration</h3>
+                        <p>De l'idée au blueprint. Je conceptualise l'interface utilisateur (UX/UI), modélise les bases de données et structure l'ensemble du projet pour garantir une fondation robuste et évolutive.</p>
+                    </div>
+                    <div class="method-card scale-in">
+                        <h3><i class="fas fa-laptop-code"></i> Développement Agile</h3>
+                        <p>Des sprints courts, des résultats concrets. Un processus de développement itératif et transparent, avec des mises à jour régulières et votre feedback constant, pour s'assurer que le produit final dépasse vos attentes.</p>
+                    </div>
+                    <div class="method-card scale-in">
+                        <h3><i class="fas fa-shield-alt"></i> Tests & Optimisation</h3>
+                        <p>La qualité avant tout. Des tests unitaires, d'intégration et de performance rigoureux, ainsi qu'une attention particulière à la sécurité, pour livrer une application stable, rapide et fiable.</p>
+                    </div>
+                    <div class="method-card scale-in">
+                        <h3><i class="fas fa-rocket"></i> Déploiement & Suivi</h3>
+                        <p>Mise en ligne et au-delà. Déploiement fluide sur des serveurs optimisés, accompagné d'une documentation complète et d'un support post-lancement pour une transition sans accroc.</p>
+                    </div>
+                    <div class="method-card scale-in">
+                        <h3><i class="fas fa-gem"></i> Ma Valeur Ajoutée</h3>
+                        <ul>
+                            <li><i class="fas fa-feather-alt"></i> Code propre, performant et documenté</li>
+                            <li><i class="fas fa-lock"></i> Sécurité par conception</li>
+                            <li><i class="fas fa-tablet-alt"></i> UX/UI intuitive et responsive</li>
+                            <li><i class="fas fa-handshake"></i> Communication transparente</li>
+                            <li><i class="fas fa-lightbulb"></i> Esprit innovant et proactif</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="fade-in">
+            <div class="container">
+                <h2 class="section-title">CONNECTONS-NOUS</h2>
+                <div class="contact-form-wrapper scale-in">
+                    <p style="color: var(--text-light); margin-bottom: 35px; font-size: 1.1em;">Prêt à donner vie à votre projet ? Envoyez-moi un message, et bâtissons l'avenir ensemble.</p>
+                    <form class="contact-form" method="post" action="{% url 'home' %}">
+                        {% csrf_token %}
+                        <label for="name">Nom / Organisation :</label>
+                        <input type="text" id="name" name="name" required placeholder="Votre nom ou le nom de votre entreprise">
+
+                        <label for="email">Email :</label>
+                        <input type="email" id="email" name="email" required placeholder="votre.email@example.com">
+
+                        <label for="subject">Sujet :</label>
+                        <input type="text" id="subject" name="subject" required placeholder="Ex: Projet de marketplace, demande d'information">
+
+                        <label for="message">Votre Message :</label>
+                        <textarea id="message" name="message" required placeholder="Décrivez votre projet ou votre question ici..."></textarea>
+
+                        <button type="submit">Envoyer mon message <i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+
+                <div class="contact-info fade-in">
+                    <p>Préférez-vous une approche plus directe ?</p>
+                    <div class="contact-links">
+                        {# Utilisez les variables du contexte ici, c'est mieux ! #}
+                        {% if whatsapp_number %}
+                            <a href="https://wa.me/{{ whatsapp_number }}" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        {% endif %}
+                        {% comment %} {% if email_address %}
+                            <a href="mailto:{{ email_address }}"><i class="fas fa-envelope"></i> Email Direct</a>
+                        {% endif %} {% endcomment %}
+                        
+                        {% if cvl %}
+                            <a href="{% static cv_url %}" download><i class="fas fa-file-download"></i> Télécharger CV</a> {# CORRIGÉ ICI #}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="social-links fade-in">
+                    <p style="font-size: 1.2em; color: var(--text-light); margin-bottom: 25px;">Retrouvez-moi sur les réseaux ou  par mon numéro +242 06 990 51 34  / 05 792 05 34:</p>
+                    {# Utilisez les variables du contexte ici, c'est mieux ! #}
+                    {% if github_url %}
+                        <a href="{{ github_url }}" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a> {# CORRIGÉ ICI #}
+                    {% endif %}
+                    {% if linkedin_url %}
+                        <a href="{{ linkedin_url }}" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a> {# CORRIGÉ ICI #}
+                    {% endif %}
+                    {% if facebook_url %}
+                        <a href="{{ facebook_url }}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a> {# CORRIGÉ ICI #}
+                    {% endif %}
+                    <p style="font-size: 1.2em; color: var(--text-light); margin-bottom: 25px;">à l'adresse 45 , RUE mabirou(Talangai) Et par mon adresse_mail:louangemahanga757@gmail.com</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 SACRÉCODEUR. Tous droits réservés. Propulsé par la passion du code.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

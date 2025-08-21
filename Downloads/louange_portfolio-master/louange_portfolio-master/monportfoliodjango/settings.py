@@ -5,16 +5,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
-DEBUG = False  # ⚠️ Toujours False en prod
+DEBUG = True # ⚠️ Toujours False en prod
 SECRET_KEY = os.getenv("SECRET_KEY", "insecure-secret-key")
 
 
 
-ALLOWED_HOSTS = ["web-production-79226.up.railway.app"]
+# ALLOWED_HOSTS = ["web-production-79226.up.railway.app"]
+ALLOWED_HOSTS = []
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://web-production-79226.up.railway.app"
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://web-production-79226.up.railway.app"
+# ]
 
 
 INSTALLED_APPS = [
